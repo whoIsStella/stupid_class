@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — Cascade Community Bank{% endblock %}
+
+{% block content %}
+<div class="container section-pad">
+  <div class="page-header">
+    <h1>Contact Us</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+      {% if sent %}
+        <div class="alert alert-success">
+          <strong>Message received.</strong> Thank you for contacting Cascade Community Bank.
+          A representative will respond within one business day.
+        </div>
+      {% else %}
+        <p style="font-family:Arial,sans-serif;font-size:13px;margin-bottom:20px;">
+          Use the form below to send us a message. For urgent matters, please call
+          <strong>(503) 555-0180</strong> during business hours.
+        </p>
+        <form method="POST" action="/contact">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number <span style="font-weight:normal;color:#888;">(optional)</span></label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="(503) 555-0100">
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select class="form-control" id="subject" name="subject">
+              <option value="">— Select a topic —</option>
+              <option>Account Inquiry</option>
+              <option>Loan Information</option>
+              <option>Online Banking Support</option>
+              <option>Report a Lost or Stolen Card</option>
+              <option>Business Banking</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="5" placeholder="How can we help you?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="col-md-5">
+      <div style="background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:18px;font-family:Arial,sans-serif;font-size:13px;margin-bottom:20px;">
+        <h4 style="color:var(--navy);margin-top:0;">Main Branch</h4>
+        <p>1200 SW 5th Ave, Suite 400<br>Portland, OR 97204</p>
+        <p><strong>Phone:</strong> (503) 555-0180<br>
+           <strong>Fax:</strong> (503) 555-0181<br>
+           <strong>Email:</strong> info@cascadecommbank.com</p>
+        <p><strong>Hours:</strong><br>
+           Mon–Fri: 9:00 AM – 5:00 PM<br>
+           Sat: 9:00 AM – 1:00 PM<br>
+           Sun: Closed</p>
+      </div>
+      <div style="border:1px solid #ddd;border-radius:3px;padding:18px;font-family:Arial,sans-serif;font-size:13px;">
+        <h4 style="color:var(--navy);margin-top:0;">Other Branches</h4>
+        <p><strong>Eugene</strong><br>488 Willamette St, Eugene, OR 97401<br>(541) 555-0220</p>
+        <p><strong>Vancouver, WA</strong><br>906 Main St, Vancouver, WA 98660<br>(360) 555-0145</p>
+        <p><strong>Salem</strong><br>350 Commercial St NE, Salem, OR 97301<br>(503) 555-0260</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

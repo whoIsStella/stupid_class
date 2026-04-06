@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cPanel Login</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1a1a2e;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 13px;
+    }
+    .header {
+      background: #ff6c2f;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header .brand {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .header .version {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 2px;
+    }
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 54px);
+    }
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      width: 360px;
+      padding: 32px 36px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .card h2 {
+      margin: 0 0 22px;
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 4px;
+    }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-bottom: 14px;
+    }
+    input[type=text]:focus, input[type=password]:focus {
+      border-color: #ff6c2f;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255,108,47,0.2);
+    }
+    .btn-login {
+      width: 100%;
+      background: #ff6c2f;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 9px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-login:hover { background: #e05520; }
+    .error {
+      background: #fdf2f2;
+      border: 1px solid #e0a0a0;
+      border-radius: 3px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #a33;
+      margin-bottom: 14px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="brand">cPanel</div>
+      <div class="version">Version 11.86.0.24 (build 24)</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <h2>Log in to cPanel</h2>
+
+      {% if error %}
+      <div class="error">Login attempt failed. The username or password is incorrect.</div>
+      {% endif %}
+
+      <form method="POST" action="/cpanel">
+        <label for="user">Username</label>
+        <input type="text" id="user" name="user" placeholder="cPanel username" autocomplete="off">
+
+        <label for="pass">Password</label>
+        <input type="password" id="pass" name="pass" placeholder="Password" autocomplete="off">
+
+        <button type="submit" class="btn-login">Log in</button>
+      </form>
+
+      <div class="footer">
+        cascadecommbank.com &nbsp;&bull;&nbsp; cPanel &amp; WHM&reg; 11.86
+      </div>
+    </div>
+  </div>
+</body>
+</html>

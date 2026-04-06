@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Business Banking — Cascade Community Bank{% endblock %}
+
+{% block content %}
+<div class="container section-pad">
+  <div class="page-header">
+    <h1>Business Banking</h1>
+  </div>
+
+  <p class="lead" style="font-family:Arial,sans-serif;font-size:15px;">
+    From sole proprietors to mid-sized companies, Cascade Community Bank provides the
+    financial tools and local expertise your business needs to thrive.
+  </p>
+
+  <div class="row" style="margin-top:28px;">
+    <div class="col-md-8">
+
+      <h2 class="section-heading">Business Checking</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Business Basic Checking</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">
+              200 free transactions/month. No minimum balance. Online bill pay included.
+              Best for small businesses with lower transaction volume.
+            </p>
+            <a href="/contact" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Business Plus Checking</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">
+              Unlimited transactions. Positive Pay fraud protection. ACH origination.
+              $18/mo — waived with $10,000 average balance.
+            </p>
+            <a href="/contact" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Merchant Services</h2>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="product-card">
+            <h3>Payment Processing</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">
+              Accept credit cards, debit cards, and contactless payments in-store and online.
+              Next-day funding available. Competitive interchange-plus pricing.
+              EMV chip card terminals provided.
+            </p>
+            <a href="/contact" class="btn btn-primary btn-sm">Request a Quote</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Business Lending</h2>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="product-card">
+            <h3>SBA Loans</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">SBA 7(a) and 504 programs. Preferred SBA lender status.</p>
+            <a href="/loans" class="btn btn-default btn-xs">Learn More</a>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="product-card">
+            <h3>Business Line of Credit</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">Revolving credit from $25,000 to $500,000. Flexible repayment.</p>
+            <a href="/loans" class="btn btn-default btn-xs">Learn More</a>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="product-card">
+            <h3>Equipment Financing</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">Finance up to 100% of equipment cost. Terms up to 72 months.</p>
+            <a href="/loans" class="btn btn-default btn-xs">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Treasury &amp; Cash Management</h2>
+      <ul style="font-family:Arial,sans-serif;font-size:13px;line-height:2;">
+        <li>ACH origination — payroll, vendor payments</li>
+        <li>Wire transfers — domestic and international</li>
+        <li>Remote deposit capture</li>
+        <li>Positive Pay and ACH filter services</li>
+        <li>Zero Balance Accounts (ZBA)</li>
+        <li>Sweep accounts</li>
+      </ul>
+
+    </div>
+
+    <div class="col-md-4">
+      <div style="background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:18px;font-family:Arial,sans-serif;font-size:13px;">
+        <h4 style="color:var(--navy);margin-top:0;">Business Resources</h4>
+        <ul style="padding-left:18px;line-height:1.9;">
+          <li><a href="/login">Business Online Banking</a></li>
+          <li><a href="/loans">Business Loans</a></li>
+          <li><a href="/contact">Speak with a Banker</a></li>
+          <li><a href="/contact">Open a Business Account</a></li>
+        </ul>
+        <div class="divider"></div>
+        <img src="/static/img/business-banker.jpg" alt="Business banker consultation" class="img-responsive placeholder" style="margin-bottom:12px;">
+        <p><strong>Talk to a local business banker.</strong> Our team understands the Pacific Northwest market.</p>
+        <p><strong>(503) 555-0188</strong><br>Business Banking Direct Line</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

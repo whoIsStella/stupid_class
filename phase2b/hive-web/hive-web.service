@@ -1,0 +1,15 @@
+[Unit]
+Description=Hive web surface
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/hive/hive-web
+ExecStart=/opt/hive/hive-web/run.sh
+Restart=on-failure
+RestartSec=5
+Environment=HIVE_PORT=80
+Environment=HIVE_LOG=/var/log/hive/web.json
+
+[Install]
+WantedBy=multi-user.target

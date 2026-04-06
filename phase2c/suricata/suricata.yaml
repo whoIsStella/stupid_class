@@ -1,0 +1,246 @@
+%YAML 1.1
+---
+# suricata.yaml — Hive IDS config
+# Runs on the VPS host directly (not in a microVM).
+# AF_PACKET mode on eth0 — passive IDS only, never drops packets.
+#
+# BEFORE DEPLOYING: replace YOUR_VPS_PUBLIC_IP with the actual VPS public IP.
+#   sed -i 's/YOUR_VPS_PUBLIC_IP/1.2.3.4/' /etc/suricata/suricata.yaml
+#
+# All logs go to /var/log/hive/ for consistency with the rest of the hive stack.
+
+# ── Variables ──────────────────────────────────────────────────────────────────
+
+vars:
+  address-groups:
+    # Replace with actual VPS public IP before deploying
+    HOME_NET: "[YOUR_VPS_PUBLIC_IP/32]"
+    EXTERNAL_NET: "!$HOME_NET"
+
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS: "$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    AIM_SERVERS: "$EXTERNAL_NET"
+    DC_SERVERS: "$HOME_NET"
+    DNP3_SERVER: "$HOME_NET"
+    DNP3_CLIENT: "$HOME_NET"
+    MODBUS_CLIENT: "$HOME_NET"
+    MODBUS_SERVER: "$HOME_NET"
+    ENIP_CLIENT: "$HOME_NET"
+    ENIP_SERVER: "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS: "80"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS: 1521
+    SSH_PORTS: 22
+    DNP3_PORTS: 20000
+    MODBUS_PORTS: 502
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS: 21
+    GENEVE_PORTS: 6081
+    VXLAN_PORTS: 4789
+    TEREDO_PORTS: 3544
+
+# ── Packet capture — AF_PACKET on eth0 ────────────────────────────────────────
+
+af-packet:
+  - interface: eth0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+    tpacket-v3: yes
+
+# ── Run mode ───────────────────────────────────────────────────────────────────
+# autofp = IDS only, never drops packets
+
+runmode: autofp
+
+# ── Outputs ────────────────────────────────────────────────────────────────────
+
+outputs:
+
+  # EVE JSON — the only output we use
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/hive/eve.json
+      # Rotate daily
+      rotate-interval: day
+      types:
+        - alert:
+            payload: yes
+            payload-printable: yes
+            packet: yes
+            metadata: yes
+            tagged-packets: yes
+        - anomaly:
+            enabled: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - files:
+            force-magic: no
+        - ssh
+        - flow:
+            all: yes
+        - netflow
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+
+  # All other outputs disabled
+  - fast:
+      enabled: no
+  - eve-log:
+      enabled: no
+      filename: /dev/null
+  - unified2-alert:
+      enabled: no
+  - http-log:
+      enabled: no
+  - pcap-log:
+      enabled: no
+  - alert-debug:
+      enabled: no
+  - alert-prelude:
+      enabled: no
+  - stats:
+      enabled: no
+  - syslog:
+      enabled: no
+
+# ── Logging (Suricata operational log) ────────────────────────────────────────
+
+logging:
+  default-log-level: notice
+  outputs:
+    - file:
+        enabled: yes
+        filename: /var/log/hive/suricata.log
+        level: info
+
+# ── Rules ──────────────────────────────────────────────────────────────────────
+
+default-rule-path: /var/lib/suricata/rules
+
+rule-files:
+  - suricata.rules           # ET Open ruleset (managed by suricata-update)
+  - /etc/suricata/rules/local.rules  # Hive custom rules
+
+# ── App layer protocols ────────────────────────────────────────────────────────
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+      detection-ports:
+        dp: 443
+    http:
+      enabled: yes
+    ftp:
+      enabled: yes
+    ssh:
+      enabled: yes
+    smtp:
+      enabled: yes
+    imap:
+      enabled: yes
+    dns:
+      tcp:
+        enabled: yes
+        detection-ports:
+          dp: 53
+      udp:
+        enabled: yes
+        detection-ports:
+          dp: 53
+
+# ── Detection engine ───────────────────────────────────────────────────────────
+
+detect:
+  profile: medium
+  custom-values:
+    toclient-groups: 3
+    toserver-groups: 25
+  sgh-mpm-context: auto
+  inspection-recursion-limit: 3000
+
+# ── Threading ─────────────────────────────────────────────────────────────────
+
+threading:
+  set-cpu-affinity: no
+  cpu-affinity:
+    - management-cpu-set:
+        cpu: [0]
+    - receive-cpu-set:
+        cpu: [0]
+    - worker-cpu-set:
+        cpu: ["all"]
+        mode: "balanced"
+  detect-thread-ratio: 1.0
+
+# ── Stream ─────────────────────────────────────────────────────────────────────
+
+stream:
+  memcap: 64mb
+  checksum-validation: yes
+  inline: no
+  reassembly:
+    memcap: 256mb
+    depth: 1mb
+    toserver-chunk-size: 2560
+    toclient-chunk-size: 2560
+    randomize-chunk-size: yes
+
+# ── Host table ─────────────────────────────────────────────────────────────────
+
+host:
+  hash-size: 4096
+  prealloc: 1000
+  memcap: 32mb
+
+# ── Flow ──────────────────────────────────────────────────────────────────────
+
+flow:
+  memcap: 128mb
+  hash-size: 65536
+  prealloc: 10000
+  emergency-recovery: 30
+
+flow-timeouts:
+  default:
+    new: 30
+    established: 300
+    closed: 0
+    bypassed: 100
+  tcp:
+    new: 60
+    established: 600
+    closed: 60
+    bypassed: 100
+  udp:
+    new: 30
+    established: 300
+    bypassed: 100
+  icmp:
+    new: 30
+    established: 300
+
+# ── Decoder ───────────────────────────────────────────────────────────────────
+
+decoder:
+  teredo:
+    enabled: true
+  vxlan:
+    enabled: true
+  geneve:
+    enabled: true

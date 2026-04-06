@@ -1,0 +1,14 @@
+# userdb.txt — credentials that grant access to the fake shell
+# Format: username:x:password
+# Everything not listed here fails with "Access denied".
+
+root:x:root
+root:x:toor
+root:x:123456
+root:x:password
+root:x:admin
+admin:x:admin
+admin:x:1234
+admin:x:password
+pi:x:raspberry
+ubuntu:x:ubuntu

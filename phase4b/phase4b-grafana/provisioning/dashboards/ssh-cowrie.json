@@ -1,0 +1,204 @@
+{
+  "title": "SSH/Telnet (Cowrie)",
+  "uid": "hive-ssh-cowrie",
+  "tags": ["hive", "ssh", "cowrie"],
+  "timezone": "utc",
+  "refresh": "1m",
+  "time": { "from": "now-24h", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Sessions (24h)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "session" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 2,
+      "title": "Login Attempts (24h)",
+      "type": "stat",
+      "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "cowrie_event_type:cowrie.login.*",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": null }, { "color": "red", "value": 100 }] } } }
+    },
+    {
+      "id": 3,
+      "title": "Successful Logins (24h)",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "cowrie_event_type:cowrie.login.success",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "id": 4,
+      "title": "Command Sessions (24h)",
+      "type": "stat",
+      "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "session" }],
+        "bucketAggs": [],
+        "query": "cowrie_event_type:cowrie.command.input",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "yellow", "value": null }, { "color": "red", "value": 1 }] } } }
+    },
+    {
+      "id": 5,
+      "title": "Login Attempts per Hour",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 4, "w": 24, "h": 7 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [
+        {
+          "refId": "A",
+          "alias": "Failed",
+          "metrics": [{ "type": "count", "id": "1" }],
+          "bucketAggs": [
+            { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "0" } }
+          ],
+          "query": "cowrie_event_type:cowrie.login.failed",
+          "timeField": "@timestamp"
+        },
+        {
+          "refId": "B",
+          "alias": "Success",
+          "metrics": [{ "type": "count", "id": "1" }],
+          "bucketAggs": [
+            { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "0" } }
+          ],
+          "query": "cowrie_event_type:cowrie.login.success",
+          "timeField": "@timestamp"
+        }
+      ],
+      "options": { "tooltip": { "mode": "multi" } },
+      "fieldConfig": { "defaults": { "custom": { "lineWidth": 2 } } }
+    },
+    {
+      "id": 6,
+      "title": "Top 20 Credential Pairs",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 11, "w": 10, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          {
+            "type": "terms",
+            "field": "username",
+            "id": "2",
+            "settings": { "size": "20", "order": "desc", "orderBy": "1", "min_doc_count": "1" },
+            "fake": false
+          },
+          {
+            "type": "terms",
+            "field": "password",
+            "id": "3",
+            "settings": { "size": "5", "order": "desc", "orderBy": "1", "min_doc_count": "1" }
+          }
+        ],
+        "query": "cowrie_event_type:cowrie.login.*",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "Count", "desc": true }] }
+    },
+    {
+      "id": 7,
+      "title": "Top Usernames",
+      "type": "bargauge",
+      "gridPos": { "x": 10, "y": 11, "w": 7, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "username", "id": "2", "settings": { "size": "15", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "cowrie_event_type:cowrie.login.*",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 8,
+      "title": "Top Passwords",
+      "type": "bargauge",
+      "gridPos": { "x": 17, "y": 11, "w": 7, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "password", "id": "2", "settings": { "size": "15", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "cowrie_event_type:cowrie.login.*",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": null }] } } }
+    },
+    {
+      "id": 9,
+      "title": "Top Commands Executed",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 21, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "input", "id": "2", "settings": { "size": "20", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "cowrie_event_type:cowrie.command.input",
+        "timeField": "@timestamp"
+      }]
+    },
+    {
+      "id": 10,
+      "title": "Files Attackers Tried to Download",
+      "type": "table",
+      "gridPos": { "x": 12, "y": 21, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "url", "id": "2", "settings": { "size": "20", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "cowrie_event_type:cowrie.session.file_download*",
+        "timeField": "@timestamp"
+      }]
+    }
+  ]
+}

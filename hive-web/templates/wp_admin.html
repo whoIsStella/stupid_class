@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log In &lsaquo; Cascade Community Bank &#8212; WordPress</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      background: #f0f0f1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      font-size: 13px;
+      color: #3c434a;
+      margin: 0;
+      padding: 0;
+    }
+    #login {
+      width: 320px;
+      margin: 0 auto;
+      padding: 30px 0 0;
+    }
+    .wp-logo {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .wp-logo a {
+      display: inline-block;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 122.52 122.52'%3E%3Ccircle cx='61.26' cy='61.26' r='61.26' fill='%23fff'/%3E%3Cpath d='M8.7 61.26c0 20.87 12.14 38.96 29.77 47.53L12.85 39.03A52.46 52.46 0 0 0 8.7 61.26zm86.68-2.6c0-6.51-2.34-11.02-4.35-14.53-2.67-4.34-5.18-8.01-5.18-12.35 0-4.84 3.67-9.35 8.85-9.35.23 0 .45.03.68.04A52.44 52.44 0 0 0 61.26 8.7c-18.1 0-34.06 9.29-43.38 23.36.35.01.68.02 1.02.02 6.68 0 17.02-.81 17.02-.81 3.44-.2 3.85 4.85.41 5.27 0 0-3.46.41-7.31.61l23.26 69.18 13.98-41.87-9.95-27.31c-3.44-.2-6.7-.61-6.7-.61-3.44-.2-3.04-5.47.41-5.27 0 0 10.54.81 16.82.81 6.68 0 17.02-.81 17.02-.81 3.44-.2 3.85 4.85.41 5.27 0 0-3.47.41-7.31.61l23.1 68.74 6.38-21.3c2.76-8.84 4.86-15.18 4.86-20.65zm-33.96 7.12l-19.18 55.73a52.55 52.55 0 0 0 6.02.69 52.34 52.34 0 0 0 15.34-2.28c-.12-.2-.23-.41-.32-.64L61.42 65.78zm45.19-29.84c.23 1.7.36 3.52.36 5.49 0 5.41-1.01 11.49-4.05 19.1l-16.27 47.04A52.5 52.5 0 0 0 113.82 61.26a52.64 52.64 0 0 0-3.21-25.32z' fill='%230073aa'/%3E%3C/svg%3E") no-repeat center;
+      width: 84px;
+      height: 84px;
+      background-size: 84px;
+      overflow: hidden;
+      text-indent: -9999px;
+    }
+    #loginform {
+      background: #fff;
+      border: 1px solid #c3c4c7;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+      padding: 26px 24px;
+    }
+    #loginform p { margin: 0 0 12px; }
+    #loginform label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    #loginform input[type=text],
+    #loginform input[type=password] {
+      font-size: 20px;
+      width: 100%;
+      padding: 3px 10px;
+      border: 1px solid #8c8f94;
+      border-radius: 4px;
+      background: #fbfbfb;
+      color: #2c3338;
+      margin-bottom: 2px;
+    }
+    #loginform input[type=text]:focus,
+    #loginform input[type=password]:focus {
+      border-color: #2271b1;
+      box-shadow: 0 0 0 1px #2271b1;
+      outline: 2px solid transparent;
+    }
+    .forgetmenot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      margin: 10px 0 16px;
+    }
+    #wp-submit {
+      background: #2271b1;
+      border: 1px solid #2271b1;
+      border-radius: 3px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      padding: 0 10px;
+      height: 30px;
+      width: 100%;
+      line-height: 28px;
+      text-align: center;
+    }
+    #wp-submit:hover { background: #135e96; }
+    #nav, #backtoblog {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    #nav a, #backtoblog a { color: #2271b1; }
+    .login-error {
+      background: #fff;
+      border: 1px solid #c3c4c7;
+      border-left: 4px solid #d63638;
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    #login_error strong { color: #d63638; }
+  </style>
+</head>
+<body class="login">
+  <div id="login">
+    <div class="wp-logo">
+      <a href="https://wordpress.org/" title="Powered by WordPress">WordPress</a>
+    </div>
+
+    {% if error %}
+    <div id="login_error" class="login-error">
+      <strong>Error:</strong> The username <strong>{{ submitted_user }}</strong> is not registered on this site.
+      If you are unsure of your username, try your email address instead.
+    </div>
+    {% endif %}
+
+    <form name="loginform" id="loginform" action="/wp-admin" method="post">
+      <p>
+        <label for="user_login">Username or Email Address</label>
+        <input type="text" name="log" id="user_login" class="input" value="" size="20" autocapitalize="none" autocomplete="username">
+      </p>
+      <p>
+        <label for="user_pass">Password</label>
+        <input type="password" name="pwd" id="user_pass" class="input" value="" size="20" autocomplete="current-password">
+      </p>
+      <p class="forgetmenot">
+        <input name="rememberme" type="checkbox" id="rememberme" value="forever">
+        <label for="rememberme">Remember Me</label>
+      </p>
+      <p class="submit">
+        <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In">
+        <input type="hidden" name="redirect_to" value="/wp-admin/dashboard">
+        <input type="hidden" name="testcookie" value="1">
+      </p>
+    </form>
+
+    <p id="nav">
+      <a href="/wp-login.php?action=lostpassword">Lost your password?</a>
+    </p>
+    <p id="backtoblog">
+      <a href="/">&larr; Go to Cascade Community Bank</a>
+    </p>
+  </div>
+</body>
+</html>

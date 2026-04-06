@@ -1,0 +1,39 @@
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/venv/
+**/.venv/
+
+# Phase 5 docs
+*/phase5/*
+
+# Logs & captures
+**/logs/
+**/*.log
+**/*.pcap
+**/*.zst
+
+# Databases
+**/*.db
+
+# Secrets
+*.env
+secrets.env
+
+# Shell scripts & config
+**/*.sh
+**/*.yml
+
+# Documentation
+**/*.md
+
+# Test output
+test-results.txt
+audit
+# VM setup scripts
+vm-setup
+vm stuff
+# Editor / OS
+.DS_Store
+**/.idea/
+**/.vscode/

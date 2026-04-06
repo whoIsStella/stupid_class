@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Personal Banking — Cascade Community Bank{% endblock %}
+
+{% block content %}
+<div class="container section-pad">
+  <div class="page-header">
+    <h1>Personal Banking</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <p class="lead" style="font-family:Arial,sans-serif;font-size:15px;">
+        Whether you're just starting out or planning for retirement, Cascade Community Bank
+        has the accounts and tools to help you reach your financial goals.
+      </p>
+
+      <h2 class="section-heading" style="margin-top:28px;">Checking Accounts</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Cascade Free Checking</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">No monthly fee. No minimum balance. Free Visa debit card. Free online bill pay.</p>
+            <a href="/contact" class="btn btn-primary btn-sm">Open Account</a>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Cascade Advantage Checking</h3>
+            <p style="font-family:Arial,sans-serif;font-size:13px;">Earn interest on your balance. $8/mo fee waived with $1,500 average balance. Unlimited ATM fee refunds.</p>
+            <a href="/contact" class="btn btn-primary btn-sm">Open Account</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Savings Accounts</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Statement Savings</h3>
+            <p class="rate">1.85% APY</p>
+            <p style="font-family:Arial,sans-serif;font-size:13px;margin-top:6px;">$100 minimum opening deposit. FDIC insured up to $250,000.</p>
+            <a href="/contact" class="btn btn-primary btn-sm">Open Account</a>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="product-card">
+            <h3>Money Market Savings</h3>
+            <p class="rate">3.40% APY</p>
+            <p style="font-family:Arial,sans-serif;font-size:13px;margin-top:6px;">$2,500 minimum balance. Tiered rates. Up to 6 withdrawals per month.</p>
+            <a href="/contact" class="btn btn-primary btn-sm">Open Account</a>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-heading">Online &amp; Mobile Banking</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <img src="/static/img/mobile-app-screen.jpg"
+               alt="Cascade Mobile Banking app screenshot"
+               class="img-responsive placeholder" style="margin-bottom:12px;">
+        </div>
+        <div class="col-sm-6" style="font-family:Arial,sans-serif;font-size:13px;">
+          <ul>
+            <li>View balances and transaction history</li>
+            <li>Transfer funds between accounts</li>
+            <li>Pay bills online — free</li>
+            <li>Mobile check deposit</li>
+            <li>Zelle&reg; money transfers</li>
+            <li>Card controls — freeze/unfreeze your debit card</li>
+            <li>e-Statements</li>
+          </ul>
+          <a href="/login" class="btn btn-primary">Enroll in Online Banking</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div style="background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:18px;font-family:Arial,sans-serif;font-size:13px;">
+        <h4 style="color:var(--navy);margin-top:0;">Quick Links</h4>
+        <ul style="padding-left:18px;line-height:1.9;">
+          <li><a href="/login">Online Banking Login</a></li>
+          <li><a href="/loans">Personal Loans</a></li>
+          <li><a href="/loans">Home Equity</a></li>
+          <li><a href="/contact">Open an Account</a></li>
+          <li><a href="/contact">Lost or Stolen Card</a></li>
+        </ul>
+        <div class="divider"></div>
+        <h4 style="color:var(--navy);">Need Help?</h4>
+        <p><strong>(503) 555-0180</strong><br>Mon–Fri 8am–6pm<br>Sat 9am–2pm</p>
+        <p>Or visit any branch location.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

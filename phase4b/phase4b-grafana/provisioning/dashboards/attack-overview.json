@@ -1,0 +1,162 @@
+{
+  "title": "Attack Overview",
+  "uid": "hive-attack-overview",
+  "tags": ["hive", "overview"],
+  "timezone": "utc",
+  "refresh": "1m",
+  "time": { "from": "now-24h", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Events (24h)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 2,
+      "title": "Unique Source IPs (24h)",
+      "type": "stat",
+      "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "src_ip" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": null }] } } }
+    },
+    {
+      "id": 3,
+      "title": "Web Surface Hits (24h)",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } } }
+    },
+    {
+      "id": 4,
+      "title": "SSH/Telnet Attempts (24h)",
+      "type": "stat",
+      "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-cowrie" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }] } } }
+    },
+    {
+      "id": 5,
+      "title": "IDS Alerts (24h)",
+      "type": "stat",
+      "gridPos": { "x": 16, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] } } }
+    },
+    {
+      "id": 6,
+      "title": "Events per Hour by Surface",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 4, "w": 16, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "honeypot_surface", "id": "3", "settings": { "size": "5", "order": "desc", "orderBy": "1", "min_doc_count": "1" } },
+          { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "tooltip": { "mode": "multi" } },
+      "fieldConfig": { "defaults": { "custom": { "lineWidth": 2 } } }
+    },
+    {
+      "id": 7,
+      "title": "Events by Surface",
+      "type": "piechart",
+      "gridPos": { "x": 16, "y": 4, "w": 8, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "honeypot_surface", "id": "2", "settings": { "size": "10", "order": "desc", "orderBy": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "pieType": "pie", "tooltip": { "mode": "single" } }
+    },
+    {
+      "id": 8,
+      "title": "Top 10 Source IPs",
+      "type": "bargauge",
+      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "src_ip", "id": "2", "settings": { "size": "10", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "lcd" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }, { "color": "orange", "value": 50 }, { "color": "red", "value": 200 }] } } }
+    },
+    {
+      "id": 9,
+      "title": "Recent Events",
+      "type": "table",
+      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "logs", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "Time", "desc": true }] },
+      "transformations": [{ "id": "organize", "options": { "excludeByName": { "_id": true, "_index": true, "_type": true }, "indexByName": {}, "renameByName": {} } }]
+    }
+  ]
+}

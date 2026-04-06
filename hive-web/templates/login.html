@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Online Banking Login — Cascade Community Bank{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="login-box">
+    <h2>Online Banking Login</h2>
+
+    {% if error %}
+      <div class="alert alert-danger" style="font-family:Arial,sans-serif;font-size:13px;">
+        <strong>Login failed.</strong> The username or password you entered is incorrect.
+        Please try again or <a href="/login/reset">reset your password</a>.
+      </div>
+    {% endif %}
+
+    <form method="POST" action="/login" autocomplete="off">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username"
+               placeholder="Enter your username" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password"
+               placeholder="Enter your password" autocomplete="off">
+      </div>
+      <div class="checkbox" style="font-family:Arial,sans-serif;font-size:12px;margin-bottom:14px;">
+        <label><input type="checkbox" name="remember"> Remember this device</label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" style="font-family:Arial,sans-serif;">
+        Sign In
+      </button>
+    </form>
+
+    <div class="login-links" style="margin-top:16px;">
+      <a href="/login/reset">Forgot your password?</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="/personal">Enroll in Online Banking</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="font-family:Arial,sans-serif;font-size:11px;color:#999;line-height:1.6;">
+      <strong>Security Notice:</strong> Cascade Community Bank will never ask for your
+      full Social Security Number, PIN, or one-time passcode by email or phone.
+      If you believe your account has been compromised, call us immediately at (503) 555-0180.
+    </div>
+  </div>
+</div>
+{% endblock %}

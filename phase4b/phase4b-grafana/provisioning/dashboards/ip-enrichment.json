@@ -1,0 +1,137 @@
+{
+  "title": "IP Enrichment",
+  "uid": "hive-ip-enrichment",
+  "tags": ["hive", "enrichment", "abuseipdb", "shodan"],
+  "timezone": "utc",
+  "refresh": "10m",
+  "time": { "from": "now-7d", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "IPs with Abuse Score > 80 (Known Malicious)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 5, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "abuseipdb.abuse_confidence_score:>80",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 5 }, { "color": "red", "value": 20 }] } } }
+    },
+    {
+      "id": 2,
+      "title": "Total Enriched IPs",
+      "type": "stat",
+      "gridPos": { "x": 5, "y": 0, "w": 5, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "ip" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 3,
+      "title": "TOR Exit Nodes",
+      "type": "stat",
+      "gridPos": { "x": 10, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "abuseipdb.is_tor:true",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] } } }
+    },
+    {
+      "id": 4,
+      "title": "AbuseIPDB Confidence Score Distribution",
+      "type": "bargauge",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          {
+            "type": "histogram",
+            "field": "abuseipdb.abuse_confidence_score",
+            "id": "2",
+            "settings": { "interval": "10", "min_doc_count": "0" }
+          }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "lcd" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 30 }, { "color": "orange", "value": 60 }, { "color": "red", "value": 80 }] } } }
+    },
+    {
+      "id": 5,
+      "title": "Top Shodan Tags",
+      "type": "bargauge",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "shodan.tags", "id": "2", "settings": { "size": "15", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 6,
+      "title": "Enriched IPs — Abuse Score, Shodan Tags, ASN, Country",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 12, "w": 24, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-enriched" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "logs", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "abuseipdb.abuse_confidence_score", "desc": true }] },
+      "transformations": [{
+        "id": "organize",
+        "options": {
+          "excludeByName": { "_id": true, "_index": true, "_type": true, "honeypot_hits.first_seen": true, "honeypot_hits.last_seen": true },
+          "renameByName": {
+            "@timestamp": "Enriched At",
+            "ip": "IP",
+            "abuseipdb.abuse_confidence_score": "Abuse Score",
+            "abuseipdb.total_reports": "Reports",
+            "abuseipdb.is_tor": "TOR",
+            "abuseipdb.isp": "ISP",
+            "shodan.tags": "Shodan Tags",
+            "shodan.open_ports": "Open Ports",
+            "asn.asn": "ASN",
+            "asn.org": "Org",
+            "asn.country": "Country",
+            "honeypot_hits.total": "Hits",
+            "honeypot_hits.surfaces": "Surfaces"
+          }
+        }
+      }]
+    }
+  ]
+}

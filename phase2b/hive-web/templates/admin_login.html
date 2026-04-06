@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Staff Portal — Cascade Community Bank</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      background: #e8ecf0;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background: #1a2c5b;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+    .header small {
+      font-weight: normal;
+      font-size: 11px;
+      color: #aab8d8;
+      margin-left: 10px;
+    }
+    .wrap {
+      max-width: 360px;
+      margin: 60px auto;
+      background: #fff;
+      border: 1px solid #c8cdd4;
+      border-top: 3px solid #1a2c5b;
+      padding: 28px 30px;
+    }
+    h2 {
+      font-size: 16px;
+      color: #1a2c5b;
+      margin: 0 0 20px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 4px;
+    }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 7px 9px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      box-sizing: border-box;
+      margin-bottom: 14px;
+    }
+    input[type=text]:focus, input[type=password]:focus {
+      border-color: #1a2c5b;
+      outline: none;
+    }
+    .btn {
+      width: 100%;
+      padding: 8px;
+      background: #1a2c5b;
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #111d3c; }
+    .notice {
+      margin-top: 16px;
+      padding: 8px 10px;
+      background: #fff8e1;
+      border-left: 3px solid #f0ad4e;
+      font-size: 11px;
+      color: #5a4a00;
+    }
+    .error {
+      margin-bottom: 14px;
+      padding: 8px 10px;
+      background: #fdf2f2;
+      border-left: 3px solid #c0392b;
+      font-size: 12px;
+      color: #7b1a1a;
+    }
+    .footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    Cascade Community Bank
+    <small>Internal Staff Portal</small>
+  </div>
+
+  <div class="wrap">
+    <h2>Staff Portal Login</h2>
+
+    {% if error %}
+    <div class="error">Invalid credentials. Access attempt has been logged.</div>
+    {% endif %}
+
+    <form method="POST" action="/admin/login" autocomplete="off">
+      <label for="username">Employee ID / Username</label>
+      <input type="text" id="username" name="username" placeholder="e.g. jmitchell" autocomplete="off">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Network password" autocomplete="off">
+
+      <button type="submit" class="btn">Log In</button>
+    </form>
+
+    <div class="notice">
+      Access to this portal is restricted to authorized Cascade Community Bank employees.
+      All login attempts are logged and monitored.
+    </div>
+
+    <div class="footer-note">
+      IT Help Desk: ext. 2200 &nbsp;|&nbsp; (503) 555-0199
+    </div>
+  </div>
+</body>
+</html>

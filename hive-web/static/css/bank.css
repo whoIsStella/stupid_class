@@ -1,0 +1,338 @@
+/* Cascade Community Bank — stylesheet
+   Bootstrap 3 era, intentionally conservative */
+
+:root {
+  --navy:       #1a2c5b;
+  --navy-dark:  #111d3c;
+  --gold:       #c8a84b;
+  --gold-hover: #a8893a;
+  --light-gray: #f5f5f5;
+  --mid-gray:   #888;
+  --text:       #333;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 14px;
+  color: var(--text);
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--navy);
+}
+
+a:hover {
+  color: var(--gold-hover);
+  text-decoration: underline;
+}
+
+/* ── Navbar ── */
+.navbar {
+  background-color: var(--navy);
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+  min-height: 54px;
+}
+
+.navbar-brand {
+  color: #fff !important;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  padding: 16px 15px;
+}
+
+.navbar-nav > li > a {
+  color: #ccd6f0 !important;
+  font-size: 13px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  color: var(--gold) !important;
+  background-color: transparent !important;
+}
+
+.navbar-nav > li.active > a {
+  color: var(--gold) !important;
+  background-color: transparent !important;
+}
+
+.navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+
+/* ── Hero / Jumbotron ── */
+.jumbotron {
+  background-color: var(--navy);
+  background-image: url('/static/img/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  border-radius: 0;
+  padding: 60px 30px;
+  margin-bottom: 0;
+}
+
+.jumbotron h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.jumbotron p {
+  font-size: 18px;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+.btn-gold {
+  background-color: var(--gold);
+  border-color: var(--gold-hover);
+  color: #fff;
+  font-size: 15px;
+  padding: 10px 28px;
+  border-radius: 3px;
+  font-family: Arial, sans-serif;
+}
+
+.btn-gold:hover,
+.btn-gold:focus {
+  background-color: var(--gold-hover);
+  border-color: #8a6e29;
+  color: #fff;
+}
+
+/* ── Section headings ── */
+.section-heading {
+  color: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+/* ── Feature boxes ── */
+.feature-box {
+  text-align: center;
+  padding: 24px 16px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  background: var(--light-gray);
+}
+
+.feature-box .feature-icon {
+  font-size: 40px;
+  color: var(--navy);
+  margin-bottom: 12px;
+  display: block;
+}
+
+.feature-box h3 {
+  font-size: 16px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+
+/* ── Branch hours table ── */
+.hours-table {
+  width: 100%;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+}
+
+.hours-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.hours-table td:first-child {
+  font-weight: bold;
+  width: 130px;
+}
+
+/* ── Forms ── */
+.form-group label {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
+}
+
+.form-control {
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+}
+
+.form-control:focus {
+  border-color: var(--navy);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(26,44,91,.4);
+}
+
+.btn-primary {
+  background-color: var(--navy);
+  border-color: var(--navy-dark);
+  font-family: Arial, sans-serif;
+  border-radius: 2px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--navy-dark);
+  border-color: #0a1225;
+}
+
+/* ── Login box ── */
+.login-box {
+  max-width: 400px;
+  margin: 40px auto;
+  border: 1px solid #ccc;
+  border-top: 4px solid var(--navy);
+  border-radius: 3px;
+  padding: 28px 32px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.login-box h2 {
+  font-size: 20px;
+  color: var(--navy);
+  margin-bottom: 20px;
+}
+
+.login-links {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  margin-top: 12px;
+  color: var(--mid-gray);
+}
+
+.login-links a {
+  color: var(--navy);
+}
+
+/* ── Alerts ── */
+.alert {
+  border-radius: 2px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+/* ── Page header ── */
+.page-header {
+  border-bottom: 2px solid var(--gold);
+  margin-bottom: 24px;
+  padding-bottom: 10px;
+}
+
+.page-header h1 {
+  color: var(--navy);
+  font-size: 28px;
+  margin: 0;
+}
+
+/* ── Product cards ── */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #fff;
+}
+
+.product-card h3 {
+  color: var(--navy);
+  font-size: 17px;
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.product-card .rate {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--gold-hover);
+  font-family: Arial, sans-serif;
+}
+
+/* ── Footer ── */
+.site-footer {
+  background-color: #2a2a2a;
+  color: #aaa;
+  padding: 28px 0 20px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  margin-top: 40px;
+}
+
+.site-footer a {
+  color: #bbb;
+}
+
+.site-footer a:hover {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.footer-badge {
+  display: inline-block;
+  border: 1px solid #555;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 2px;
+  margin-right: 8px;
+  color: #ccc;
+  letter-spacing: 0.03em;
+}
+
+.footer-routing {
+  color: #777;
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+/* ── 404 page ── */
+.error-page {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.error-page h1 {
+  font-size: 80px;
+  color: #ddd;
+  margin-bottom: 0;
+  font-family: Arial, sans-serif;
+}
+
+.error-page h2 {
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+
+/* ── Utility ── */
+.section-pad {
+  padding: 36px 0;
+}
+
+.divider {
+  border-top: 1px solid #e5e5e5;
+  margin: 24px 0;
+}
+
+img.placeholder {
+  background: #dde3ee;
+  width: 100%;
+  height: 200px;
+  display: block;
+}

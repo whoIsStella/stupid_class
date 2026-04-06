@@ -1,0 +1,153 @@
+{
+  "title": "Web Hive",
+  "uid": "hive-web-hive",
+  "tags": ["hive", "web"],
+  "timezone": "utc",
+  "refresh": "1m",
+  "time": { "from": "now-24h", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Unique IPs Today",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "remote_ip" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 2,
+      "title": "/.env Hits",
+      "type": "stat",
+      "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "path:\\.env",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 5 }, { "color": "red", "value": 20 }] } } }
+    },
+    {
+      "id": 3,
+      "title": "/wp-admin Hits",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "path:/wp-admin*",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 5 }] } } }
+    },
+    {
+      "id": 4,
+      "title": "Total Requests (24h)",
+      "type": "stat",
+      "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 5,
+      "title": "HTTP Requests per Hour",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 4, "w": 24, "h": 7 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "0" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "tooltip": { "mode": "single" } },
+      "fieldConfig": { "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 10 }, "color": { "fixedColor": "blue", "mode": "fixed" } } }
+    },
+    {
+      "id": 6,
+      "title": "Top 20 Requested Paths",
+      "type": "bargauge",
+      "gridPos": { "x": 0, "y": 11, "w": 12, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "path", "id": "2", "settings": { "size": "20", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "lcd" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 10 }, { "color": "red", "value": 50 }] } } }
+    },
+    {
+      "id": 7,
+      "title": "Top User Agents (Scanner Detection)",
+      "type": "bargauge",
+      "gridPos": { "x": 12, "y": 11, "w": 12, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "user_agent.keyword", "id": "2", "settings": { "size": "15", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 8,
+      "title": "Recent Requests",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 21, "w": 24, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-web" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "logs", "id": "1" }],
+        "bucketAggs": [],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "Time", "desc": true }] },
+      "transformations": [{
+        "id": "organize",
+        "options": {
+          "excludeByName": { "_id": true, "_index": true, "_type": true, "headers": true, "post_body": true, "honeypot_surface": true, "log_source": true },
+          "indexByName": {},
+          "renameByName": { "@timestamp": "Time", "remote_ip": "Source IP", "method": "Method", "path": "Path", "user_agent": "User Agent", "response_code": "Status" }
+        }
+      }]
+    }
+  ]
+}

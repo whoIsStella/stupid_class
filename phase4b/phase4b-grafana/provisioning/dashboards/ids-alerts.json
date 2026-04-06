@@ -1,0 +1,161 @@
+{
+  "title": "IDS Alerts (Suricata)",
+  "uid": "hive-ids-alerts",
+  "tags": ["hive", "ids", "suricata"],
+  "timezone": "utc",
+  "refresh": "1m",
+  "time": { "from": "now-24h", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total Alerts (24h)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 50 }, { "color": "red", "value": 200 }] } } }
+    },
+    {
+      "id": 2,
+      "title": "Unique Source IPs (24h)",
+      "type": "stat",
+      "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "src_ip" }],
+        "bucketAggs": [],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 3,
+      "title": "Unique SSH Hassh Fingerprints",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "cardinality", "id": "1", "field": "ssh.hassh.hash" }],
+        "bucketAggs": [],
+        "query": "event_type:ssh",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "value", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] } } }
+    },
+    {
+      "id": 4,
+      "title": "Alert Events per Hour",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 4, "w": 24, "h": 7 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "0" } }
+        ],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "tooltip": { "mode": "single" } },
+      "fieldConfig": { "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 10 }, "color": { "fixedColor": "red", "mode": "fixed" } } }
+    },
+    {
+      "id": 5,
+      "title": "Top 10 Alert Signatures",
+      "type": "bargauge",
+      "gridPos": { "x": 0, "y": 11, "w": 12, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "alert.signature", "id": "2", "settings": { "size": "10", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "lcd" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }] } } }
+    },
+    {
+      "id": 6,
+      "title": "Top Destination Ports",
+      "type": "bargauge",
+      "gridPos": { "x": 12, "y": 11, "w": 12, "h": 10 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "dest_port", "id": "2", "settings": { "size": "15", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] } } }
+    },
+    {
+      "id": 8,
+      "title": "Flow Bytes per Hour",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 21, "w": 24, "h": 7 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "alias": "Bytes",
+        "metrics": [{ "type": "sum", "id": "1", "field": "flow.bytes_toserver" }],
+        "bucketAggs": [
+          { "type": "date_histogram", "field": "@timestamp", "id": "2", "settings": { "interval": "1h", "min_doc_count": "0" } }
+        ],
+        "query": "event_type:flow",
+        "timeField": "@timestamp"
+      }],
+      "options": { "tooltip": { "mode": "single" } },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": { "lineWidth": 2, "fillOpacity": 10 },
+          "color": { "fixedColor": "blue", "mode": "fixed" }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Recent Alerts",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 28, "w": 24, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-suricata" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "logs", "id": "1" }],
+        "bucketAggs": [],
+        "query": "event_type:alert",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "Time", "desc": true }] },
+      "transformations": [{
+        "id": "organize",
+        "options": {
+          "excludeByName": { "_id": true, "_index": true, "_type": true, "honeypot_surface": true, "log_source": true },
+          "renameByName": { "@timestamp": "Time", "src_ip": "Source IP", "dest_ip": "Dest IP", "dest_port": "Port", "alert.signature": "Signature", "alert.severity": "Severity" }
+        }
+      }]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+# local.rules — Hive custom Suricata rules
+# SIDs 9000000+ reserved for local rules — no conflict with ET Open.
+# After editing: systemctl reload suricata (not restart — reload keeps packets flowing).
+
+# ── Dir-bust tool detection ────────────────────────────────────────────────────
+
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - gobuster"; flow:to_server,established; http.user_agent; content:"gobuster"; nocase; sid:9000001; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - dirb"; flow:to_server,established; http.user_agent; content:"dirb"; nocase; sid:9000002; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - nikto"; flow:to_server,established; http.user_agent; content:"nikto"; nocase; sid:9000003; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - wfuzz"; flow:to_server,established; http.user_agent; content:"wfuzz"; nocase; sid:9000004; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - ffuf"; flow:to_server,established; http.user_agent; content:"ffuf"; nocase; sid:9000005; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - sqlmap"; flow:to_server,established; http.user_agent; content:"sqlmap"; nocase; sid:9000006; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE DirBust Tool - nuclei"; flow:to_server,established; http.user_agent; content:"nuclei"; nocase; sid:9000007; rev:1;)
+
+# ── Hive bait path hits ────────────────────────────────────────────────────
+
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - .env"; flow:to_server,established; http.uri; content:"/.env"; startswith; sid:9000010; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - wp-admin"; flow:to_server,established; http.uri; content:"/wp-admin"; startswith; sid:9000011; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - phpmyadmin"; flow:to_server,established; http.uri; content:"/phpmyadmin"; nocase; sid:9000012; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - db_dump"; flow:to_server,established; http.uri; content:"/db_dump"; sid:9000013; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - backup.zip"; flow:to_server,established; http.uri; content:"/backup"; sid:9000014; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - api keys"; flow:to_server,established; http.uri; content:"/api/keys"; sid:9000015; rev:1;)
+alert http any any -> $HOME_NET any (msg:"HIVE Bait Path - api config"; flow:to_server,established; http.uri; content:"/api/config"; sid:9000016; rev:1;)
+
+# ── Brute force and unusual protocols ─────────────────────────────────────────
+
+# SSH brute force: 10+ attempts from same source in 60 seconds
+alert ssh any any -> $HOME_NET 22 (msg:"HIVE SSH Brute Force"; flow:to_server; detection_filter:track by_src, count 10, seconds 60; sid:9000020; rev:1;)
+
+# Any Telnet connection attempt
+alert tcp any any -> $HOME_NET 23 (msg:"HIVE Telnet Connection Attempt"; flow:to_server; flags:S; sid:9000021; rev:1;)
+
+# Port scan — SYN to 20+ ports in 5 seconds from same source
+alert tcp any any -> $HOME_NET any (msg:"HIVE Port Scan Detected"; flow:to_server; flags:S; detection_filter:track by_src, count 20, seconds 5; sid:9000022; rev:1;)

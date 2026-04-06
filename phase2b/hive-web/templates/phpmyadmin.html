@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow">
+  <title>phpMyAdmin</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 12px;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    #pma_header {
+      background: #3d6688;
+      color: #fff;
+      padding: 8px 14px;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+    #pma_header span {
+      font-size: 11px;
+      font-weight: normal;
+      color: #b0c8e0;
+      margin-left: 8px;
+    }
+    .login-wrap {
+      max-width: 380px;
+      margin: 50px auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 24px 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .login-wrap h2 {
+      font-size: 14px;
+      margin: 0 0 16px;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    table { width: 100%; }
+    td { padding: 5px 4px; vertical-align: middle; }
+    td:first-child { width: 110px; font-weight: bold; white-space: nowrap; }
+    input[type=text], input[type=password], select {
+      width: 100%;
+      padding: 4px 6px;
+      border: 1px solid #bbb;
+      font-size: 12px;
+      border-radius: 2px;
+      box-sizing: border-box;
+    }
+    .go-btn {
+      margin-top: 14px;
+      text-align: right;
+    }
+    input[type=submit] {
+      background: #3d6688;
+      color: #fff;
+      border: 1px solid #2a4d6a;
+      padding: 5px 18px;
+      font-size: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    input[type=submit]:hover { background: #2a4d6a; }
+    .error-msg {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 7px 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      border-radius: 2px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #999;
+      margin-top: 20px;
+    }
+    .footer a { color: #3d6688; }
+  </style>
+</head>
+<body>
+  <div id="pma_header">
+    phpMyAdmin <span>4.9.7 / MySQL 5.7.42</span>
+  </div>
+
+  <div class="login-wrap">
+    <h2>Welcome to phpMyAdmin</h2>
+
+    {% if error %}
+    <div class="error-msg">
+      Cannot log in to the MySQL server. Access denied for user '{{ submitted_user }}'@'localhost'.
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/phpmyadmin/index.php">
+      <table>
+        <tr>
+          <td><label for="pma_username">Username:</label></td>
+          <td><input type="text" name="pma_username" id="pma_username" value="" autocomplete="off"></td>
+        </tr>
+        <tr>
+          <td><label for="pma_password">Password:</label></td>
+          <td><input type="password" name="pma_password" id="pma_password" value="" autocomplete="off"></td>
+        </tr>
+        <tr>
+          <td><label for="server">Server:</label></td>
+          <td>
+            <select name="server" id="server">
+              <option value="1">db01.cascadecommbank.local (MySQL 5.7)</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+      <div class="go-btn">
+        <input type="submit" value="Go &raquo;" name="submit">
+      </div>
+    </form>
+
+    <div class="footer">
+      <a href="https://www.phpmyadmin.net" rel="noopener noreferrer">phpMyAdmin</a> 4.9.7
+    </div>
+  </div>
+</body>
+</html>

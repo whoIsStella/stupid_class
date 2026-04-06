@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Cascade Community Bank — Home{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>Your Community Bank<br>Since 1987</h1>
+    <p>Serving families and businesses across the Pacific Northwest<br>with personal service and competitive rates.</p>
+    <a href="/personal" class="btn btn-gold btn-lg">Open an Account</a>
+    &nbsp;
+    <a href="/login" class="btn btn-default btn-lg" style="margin-left:8px;">Online Banking Login</a>
+  </div>
+</div>
+
+<!-- Feature strip -->
+<div class="container section-pad">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="feature-box">
+        <img src="/static/img/icon-online.png" alt="Online Banking" style="height:48px;margin-bottom:12px;">
+        <h3>Online &amp; Mobile Banking</h3>
+        <p>Check balances, pay bills, and transfer funds anytime from your computer or mobile device.</p>
+        <a href="/login" class="btn btn-primary btn-sm">Sign In</a>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="feature-box">
+        <img src="/static/img/icon-deposit.png" alt="Mobile Deposit" style="height:48px;margin-bottom:12px;">
+        <h3>Mobile Deposit</h3>
+        <p>Deposit checks from anywhere using your smartphone camera. Available in the Cascade Mobile Banking app.</p>
+        <a href="/personal" class="btn btn-primary btn-sm">Learn More</a>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="feature-box">
+        <img src="/static/img/icon-rates.png" alt="Rates" style="height:48px;margin-bottom:12px;">
+        <h3>Competitive Rates</h3>
+        <p>High-yield savings, CDs, and home equity products at rates that work for you and your family.</p>
+        <a href="/loans" class="btn btn-primary btn-sm">View Rates</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Branch photo + hours -->
+<div style="background:#f5f5f5;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:36px 0;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="section-heading">Branch &amp; ATM Hours</h2>
+        <table class="hours-table">
+          <tbody>
+            <tr><td>Monday – Friday</td><td>9:00 AM – 5:00 PM</td></tr>
+            <tr><td>Saturday</td><td>9:00 AM – 1:00 PM</td></tr>
+            <tr><td>Sunday</td><td>Closed</td></tr>
+            <tr><td>ATM</td><td>24 Hours / 7 Days</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:14px;font-family:Arial,sans-serif;font-size:13px;color:#666;">
+          Holiday hours may vary. Call <strong>(503) 555-0180</strong> for current information.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <img src="/static/img/branch-exterior.jpg"
+             alt="Cascade Community Bank main branch, Portland OR"
+             class="img-responsive placeholder">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Latest news -->
+<div class="container section-pad">
+  <h2 class="section-heading">News &amp; Announcements</h2>
+  <div class="row">
+    <div class="col-sm-4">
+      <h4 style="color:var(--navy);">New Bend Branch Opening</h4>
+      <p style="font-family:Arial,sans-serif;font-size:13px;">We're pleased to announce the opening of our newest location at 477 NW Wall St, Bend, OR — coming Spring 2025.</p>
+      <a href="/about" style="font-family:Arial,sans-serif;font-size:12px;">Read more &raquo;</a>
+    </div>
+    <div class="col-sm-4">
+      <h4 style="color:var(--navy);">Updated Mobile App Available</h4>
+      <p style="font-family:Arial,sans-serif;font-size:13px;">Version 4.2 of the Cascade Mobile Banking app is now available on iOS and Android with improved bill pay and Zelle&reg; integration.</p>
+      <a href="/personal" style="font-family:Arial,sans-serif;font-size:12px;">Read more &raquo;</a>
+    </div>
+    <div class="col-sm-4">
+      <h4 style="color:var(--navy);">Holiday CD Special</h4>
+      <p style="font-family:Arial,sans-serif;font-size:13px;">Open a 15-month CD before December 31 and earn 4.85% APY. Minimum deposit $1,000. FDIC insured.</p>
+      <a href="/loans" style="font-family:Arial,sans-serif;font-size:12px;">View rates &raquo;</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

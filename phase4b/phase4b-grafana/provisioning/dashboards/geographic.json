@@ -1,0 +1,100 @@
+{
+  "title": "Geographic Distribution",
+  "uid": "hive-geographic",
+  "tags": ["hive", "geo", "map"],
+  "timezone": "utc",
+  "refresh": "5m",
+  "time": { "from": "now-24h", "to": "now" },
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Attack Origins World Map",
+      "type": "geomap",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 12 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          {
+            "type": "geo_hash_grid",
+            "field": "geoip.location",
+            "id": "2",
+            "settings": { "precision": "3" }
+          }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": {
+        "view": { "id": "zero", "lat": 20, "lon": 0, "zoom": 1 },
+        "controls": { "showZoom": true, "mouseWheelZoom": true, "showAttribution": true, "showScale": false, "showDebug": false },
+        "tooltip": { "mode": "details" },
+        "layers": [
+          {
+            "type": "heatmap",
+            "name": "Attack Heatmap",
+            "config": { "weight": { "fixed": 1, "max": 100, "field": { "name": "Count", "mode": "field" } }, "radius": 15, "blur": 15, "opacity": 0.6 },
+            "location": { "mode": "auto" },
+            "tooltip": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Top 10 Source Countries",
+      "type": "bargauge",
+      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "geoip.country_name", "id": "2", "settings": { "size": "10", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "lcd" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }, { "color": "orange", "value": 100 }, { "color": "red", "value": 500 }] } } }
+    },
+    {
+      "id": 3,
+      "title": "Top 10 ASNs",
+      "type": "bargauge",
+      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "geoip.as_org", "id": "2", "settings": { "size": "10", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "reduceOptions": { "calcs": ["sum"] }, "orientation": "horizontal", "displayMode": "basic" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 50 }] } } }
+    },
+    {
+      "id": 4,
+      "title": "Top Source IPs with Country and ASN",
+      "type": "table",
+      "gridPos": { "x": 0, "y": 20, "w": 24, "h": 8 },
+      "datasource": { "type": "elasticsearch", "uid": "elasticsearch-all" },
+      "targets": [{
+        "refId": "A",
+        "metrics": [{ "type": "count", "id": "1" }],
+        "bucketAggs": [
+          { "type": "terms", "field": "src_ip", "id": "2", "settings": { "size": "50", "order": "desc", "orderBy": "1", "min_doc_count": "1" } }
+        ],
+        "query": "",
+        "timeField": "@timestamp"
+      }],
+      "options": { "sortBy": [{ "displayName": "Count", "desc": true }] }
+    }
+  ]
+}

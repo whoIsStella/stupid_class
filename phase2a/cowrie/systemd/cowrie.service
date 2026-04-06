@@ -1,0 +1,17 @@
+[Unit]
+Description=Cowrie SSH/Telnet Hive
+After=network.target
+
+[Service]
+Type=simple
+User=cowrie
+WorkingDirectory=/opt/cowrie
+ExecStart=/opt/cowrie/cowrie-env/bin/python bin/cowrie start -n
+Restart=always
+RestartSec=5
+# Prevent filling disk with downloaded malware samples
+# Clean dl/ files older than 7 days on each start
+ExecStartPre=/bin/find /var/log/hive/dl -mtime +7 -delete
+
+[Install]
+WantedBy=multi-user.target
