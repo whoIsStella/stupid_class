@@ -24,5 +24,5 @@ exec tcpdump \
     -G "$(( ROTATE_MINUTES * 60 ))" \
     -W "$MAX_FILES" \
     -w "${OUTDIR}/hive-%Y%m%dT%H%M%S.pcap" \
-    -z gzip \
+    -z /opt/hive/scripts/on-rotate.sh \
     'not src host 10.0.0.2 and not dst host 10.0.0.2'

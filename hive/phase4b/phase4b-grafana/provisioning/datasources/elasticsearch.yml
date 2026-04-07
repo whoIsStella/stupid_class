@@ -1,0 +1,57 @@
+apiVersion: 1
+
+datasources:
+  - name: Elasticsearch-All
+    uid: elasticsearch-all
+    type: elasticsearch
+    url: http://localhost:9200
+    database: "hive-*"
+    isDefault: true
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+      maxConcurrentShardRequests: 5
+      logMessageField: path
+      logLevelField: response_code
+
+  - name: Elasticsearch-Web
+    uid: elasticsearch-web
+    type: elasticsearch
+    url: http://localhost:9200
+    database: "hive-web-*"
+    isDefault: false
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+      logMessageField: path
+      logLevelField: response_code
+
+  - name: Elasticsearch-Cowrie
+    uid: elasticsearch-cowrie
+    type: elasticsearch
+    url: http://localhost:9200
+    database: "hive-cowrie-*"
+    isDefault: false
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+
+  - name: Elasticsearch-Suricata
+    uid: elasticsearch-suricata
+    type: elasticsearch
+    url: http://localhost:9200
+    database: "hive-suricata-*"
+    isDefault: false
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"
+
+  - name: Elasticsearch-Enriched
+    uid: elasticsearch-enriched
+    type: elasticsearch
+    url: http://localhost:9200
+    database: "hive-enriched-*"
+    isDefault: false
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: "8.0.0"

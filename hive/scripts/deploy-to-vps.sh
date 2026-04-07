@@ -103,9 +103,11 @@ rsync "${RSYNC_OPTS[@]}" \
     "$HIVE/phase2c/suricata/systemd/suricata-override.conf" \
     "$VPS:/etc/systemd/system/suricata.service.d/override.conf"
 
-info "phase3a: tcpdump capture script → /opt/hive/scripts/..."
+info "phase3a: tcpdump capture scripts → /opt/hive/scripts/..."
 rsync "${RSYNC_OPTS[@]}" \
     "$HIVE/phase3a/phase3a-tcpdump/scripts/start-capture.sh" \
+    "$HIVE/phase3a/phase3a-tcpdump/scripts/compress-pcaps.sh" \
+    "$HIVE/phase3a/phase3a-tcpdump/scripts/on-rotate.sh" \
     "$VPS:/opt/hive/scripts/"
 
 info "phase3b: filebeat config → /opt/hive/phase3b/..."
@@ -130,6 +132,8 @@ chmod +x \
     /opt/hive/hive-web/run.sh \
     /opt/hive/hive-web/setup.sh \
     /opt/hive/scripts/start-capture.sh \
+    /opt/hive/scripts/compress-pcaps.sh \
+    /opt/hive/scripts/on-rotate.sh \
     /opt/hive/scripts/setup-wg-vps.sh 2>/dev/null || true
 chmod 600 /opt/cowrie/etc/cowrie.cfg /opt/cowrie/etc/userdb.txt 2>/dev/null || true
 systemctl daemon-reload

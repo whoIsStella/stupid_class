@@ -1,0 +1,16 @@
+cluster.name: hive-analysis
+node.name: hive-node-1
+
+# Single-node — no cluster formation needed
+discovery.type: single-node
+
+# Bind to localhost only
+network.host: 127.0.0.1
+
+# Data and log paths (inside container — mapped to Docker volume)
+path.data: /usr/share/elasticsearch/data
+path.logs: /usr/share/elasticsearch/logs
+
+# Security — disabled for local dev
+# Set to true for production and run: elasticsearch-setup-passwords auto
+xpack.security.enabled: false

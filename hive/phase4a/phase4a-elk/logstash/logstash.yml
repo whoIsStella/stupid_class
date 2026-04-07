@@ -1,0 +1,11 @@
+node.name: hive-logstash
+
+# Load all .conf files from the pipeline directory as a single pipeline
+path.config: /usr/share/logstash/pipeline
+
+# Elasticsearch output connection
+# xpack.monitoring.enabled: false suppresses the monitoring warning on free tier
+xpack.monitoring.enabled: false
+
+# Log level — set to debug temporarily if pipelines are misbehaving
+log.level: info
