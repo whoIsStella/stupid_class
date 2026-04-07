@@ -22,7 +22,7 @@ from logger import log_hit
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# ── Fake response file paths ───────────────────────────────────────────────────
+#  Fake response file paths 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _FAKE = os.path.join(_HERE, "fake_responses")
 
@@ -32,7 +32,7 @@ def _read_fake(filename):
         return f.read()
 
 
-# ── Fake headers on every response ────────────────────────────────────────────
+#  Fake headers on every response 
 @app.after_request
 def add_fake_headers(response):
     response.headers["X-Powered-By"] = "PHP/7.4.33"

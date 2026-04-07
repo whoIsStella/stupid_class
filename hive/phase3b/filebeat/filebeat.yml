@@ -1,0 +1,51 @@
+# filebeat.yml — Hive log shipper config
+#
+# Runs on the VPS (10.0.0.1). Ships logs to Logstash on the analysis
+# machine (10.0.0.2:5044) over the WireGuard tunnel.
+#
+# Deploy: /etc/filebeat/filebeat.yml
+# Requires: WireGuard tunnel up (wg0, 10.0.0.1/10.0.0.2)
+
+filebeat.inputs:
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/hive/web.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      log_source: web_honeypot
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/hive/cowrie.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      log_source: cowrie
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/hive/eve.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      log_source: suricata
+    fields_under_root: true
+
+output.logstash:
+  hosts: ["10.0.0.2:5044"]
+
+filebeat.registry.path: /var/lib/filebeat/registry
+
+logging.level: warning
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7

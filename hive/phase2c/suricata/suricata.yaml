@@ -7,9 +7,10 @@
 # BEFORE DEPLOYING: replace YOUR_VPS_PUBLIC_IP with the actual VPS public IP.
 #   sed -i 's/YOUR_VPS_PUBLIC_IP/1.2.3.4/' /etc/suricata/suricata.yaml
 #
-# All logs go to /var/log/hive/ for consistency with the rest of the hive stack.
+# All logs go to /var/log/hive/ for consistency with the rest
+# of the hive stack.
 
-# ── Variables ──────────────────────────────────────────────────────────────────
+# Variables
 
 vars:
   address-groups:
@@ -44,7 +45,7 @@ vars:
     VXLAN_PORTS: 4789
     TEREDO_PORTS: 3544
 
-# ── Packet capture — AF_PACKET on eth0 ────────────────────────────────────────
+# Packet capture — AF_PACKET on eth0
 
 af-packet:
   - interface: eth0
@@ -54,12 +55,12 @@ af-packet:
     use-mmap: yes
     tpacket-v3: yes
 
-# ── Run mode ───────────────────────────────────────────────────────────────────
+# Run mode
 # autofp = IDS only, never drops packets
 
 runmode: autofp
 
-# ── Outputs ────────────────────────────────────────────────────────────────────
+# Outputs
 
 outputs:
 
@@ -118,7 +119,7 @@ outputs:
   - syslog:
       enabled: no
 
-# ── Logging (Suricata operational log) ────────────────────────────────────────
+# Logging (Suricata operational log)
 
 logging:
   default-log-level: notice
@@ -128,7 +129,7 @@ logging:
         filename: /var/log/hive/suricata.log
         level: info
 
-# ── Rules ──────────────────────────────────────────────────────────────────────
+# Rules
 
 default-rule-path: /var/lib/suricata/rules
 
@@ -136,7 +137,7 @@ rule-files:
   - suricata.rules           # ET Open ruleset (managed by suricata-update)
   - /etc/suricata/rules/local.rules  # Hive custom rules
 
-# ── App layer protocols ────────────────────────────────────────────────────────
+# App layer protocols
 
 app-layer:
   protocols:
@@ -164,7 +165,7 @@ app-layer:
         detection-ports:
           dp: 53
 
-# ── Detection engine ───────────────────────────────────────────────────────────
+# Detection engine
 
 detect:
   profile: medium
@@ -174,7 +175,7 @@ detect:
   sgh-mpm-context: auto
   inspection-recursion-limit: 3000
 
-# ── Threading ─────────────────────────────────────────────────────────────────
+# Threading
 
 threading:
   set-cpu-affinity: no
@@ -188,7 +189,7 @@ threading:
         mode: "balanced"
   detect-thread-ratio: 1.0
 
-# ── Stream ─────────────────────────────────────────────────────────────────────
+# Stream
 
 stream:
   memcap: 64mb
@@ -201,14 +202,14 @@ stream:
     toclient-chunk-size: 2560
     randomize-chunk-size: yes
 
-# ── Host table ─────────────────────────────────────────────────────────────────
+# Host table
 
 host:
   hash-size: 4096
   prealloc: 1000
   memcap: 32mb
 
-# ── Flow ──────────────────────────────────────────────────────────────────────
+# Flow
 
 flow:
   memcap: 128mb
@@ -235,7 +236,7 @@ flow-timeouts:
     new: 30
     established: 300
 
-# ── Decoder ───────────────────────────────────────────────────────────────────
+# Decoder
 
 decoder:
   teredo:

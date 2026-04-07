@@ -1,39 +1,38 @@
 # Python
-**/__pycache__/
-**/*.py[cod]
-**/venv/
-**/.venv/
+__pycache__/
+*.py[cod]
+venv/
+.venv/
 
 # Phase 5 docs
-*/phase5/*
+**/phase5/
 
 # Logs & captures
-**/logs/
-**/*.log
-**/*.pcap
-**/*.zst
+logs/
+*.log
+*.pcap
+*.zst
 
 # Databases
-**/*.db
+*.db
 
 # Secrets
 *.env
 secrets.env
 
 # Shell scripts & config
-**/*.sh
-**/*.yml
-
-# Documentation
-
+/scripts/deploy-to-vps.sh
+/phase1/wireguard/setup-wg-vps.sh
+/phase1/wireguard/setup-wg-analysis.sh
+# *.yml
 
 # Test output
 test-results.txt
-audit
-# VM setup scripts
-vm-setup
-vm stuff
+/audit
+/vm-setup
+# vm stuff
+
 # Editor / OS
 .DS_Store
-**/.idea/
-**/.vscode/
+.idea/
+.vscode/

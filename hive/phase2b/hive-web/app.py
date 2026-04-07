@@ -3,12 +3,6 @@ import json
 import os
 import zipfile
 
-# Replace Werkzeug's Server header at the transport level with our fake value.
-# sys_version is cleared so no "Python/x.y" suffix appears.
-from werkzeug.serving import WSGIRequestHandler
-WSGIRequestHandler.server_version = "Apache/2.4.54 (Ubuntu)"
-WSGIRequestHandler.sys_version = ""
-
 from flask import (
     Flask,
     Response,
@@ -33,10 +27,13 @@ def _read_fake(filename):
 
 
 # ── Fake headers on every response ────────────────────────────────────────────
+# Server is set here (not via WSGIRequestHandler) so it works under both
+# gunicorn (production) and the Werkzeug dev server. gunicorn skips adding
+# its own Server header when the app already provides one.
 @app.after_request
 def add_fake_headers(response):
+    response.headers["Server"] = "Apache/2.4.54 (Ubuntu)"
     response.headers["X-Powered-By"] = "PHP/7.4.33"
-    # Server header is set at the transport level via WSGIRequestHandler above.
     return response
 
 

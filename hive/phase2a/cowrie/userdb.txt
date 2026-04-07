@@ -1,14 +1,37 @@
 # userdb.txt — credentials that grant access to the fake shell
 # Format: username:x:password
 # Everything not listed here fails with "Access denied".
+#
+# Bank persona — plausible sysadmin and app accounts for cascadecommbank.com
 
+# Generic targets
 root:x:root
 root:x:toor
-root:x:123456
 root:x:password
+root:x:123456
 root:x:admin
+root:x:cascade
+root:x:Cascade123
+root:x:cascade2024
 admin:x:admin
-admin:x:1234
 admin:x:password
-pi:x:raspberry
+admin:x:Admin123
+
+# Bank-themed service accounts
+cascade:x:cascade
+cascade:x:cascade123
+cascade:x:Cascade#2019!
+cascadeadmin:x:cascade
+bankadmin:x:bank
+bankadmin:x:bankadmin
+deploy:x:deploy
+sysadmin:x:sysadmin
+sysadmin:x:Admin123
+webmaster:x:webmaster
+apache:x:apache
+
+# Common Linux default/weak accounts
 ubuntu:x:ubuntu
+debian:x:debian
+user:x:user
+pi:x:raspberry
