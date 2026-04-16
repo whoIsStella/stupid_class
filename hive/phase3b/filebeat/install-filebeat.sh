@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # install-filebeat.sh — install and configure Filebeat on the VPS
 #
-# Run as root on the VPS (10.0.0.1).
+# Run as root on the VPS (10.77.0.1).
 # Prerequisites:
-#   - WireGuard tunnel up (wg0): 10.0.0.1 → 10.0.0.2
-#   - Logstash listening on 10.0.0.2:5044
+#   - WireGuard tunnel up (wg0): 10.77.0.1 → 10.77.0.2
+#   - Logstash listening on 10.77.0.2:5044
 #
 # Usage:  sudo bash install-filebeat.sh
 

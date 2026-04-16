@@ -11,4 +11,4 @@ Phase 3a provides packet capture for the hive. It runs a host-side `tcpdump` ser
 
 - `hive/scripts/deploy-to-vps.sh` copies `start-capture.sh` to `/opt/hive/scripts/` and installs the service unit into `/etc/systemd/system/`.
 - By default, capture runs on `eth0`, rotates hourly, keeps 168 files, and stores gzip-compressed PCAPs in `/var/log/hive/pcap/`.
-- The script captures only the first 96 bytes of each packet and excludes traffic to the analysis host at `10.0.0.2`.
+- The script captures only the first 96 bytes of each packet and excludes traffic to the analysis host at `10.77.0.2`.

@@ -52,19 +52,39 @@ fi
 green "  SSH OK"
 echo ""
 
-info "creating remote directories..."
+info "creating remote directories, user, and cowrie source tree..."
 ssh "${SSH_OPTS[@]}" "$VPS" bash <<'REMOTE'
 set -e
 mkdir -p \
     /opt/hive/hive-web \
     /opt/hive/scripts \
     /opt/hive/phase3b \
-    /opt/cowrie/etc \
     /var/log/hive/dl \
     /var/log/hive/tty \
     /var/log/hive/pcap \
     /etc/suricata/rules \
     /etc/systemd/system
+
+# cowrie runs as its own unprivileged user
+if ! id cowrie >/dev/null 2>&1; then
+    useradd --system --home-dir /opt/cowrie --shell /usr/sbin/nologin cowrie
+fi
+
+# cowrie needs its upstream source tree on the VPS; we only ship config files
+# below, so clone it here on first deploy.
+if [ ! -d /opt/cowrie/.git ]; then
+    apt-get update -qq
+    apt-get install -y -qq git python3-venv python3-dev build-essential libssl-dev libffi-dev
+    git clone https://github.com/cowrie/cowrie.git /opt/cowrie
+fi
+chown -R cowrie:cowrie /opt/cowrie /var/log/hive/dl /var/log/hive/tty
+
+# Build the cowrie venv if missing so /opt/cowrie/cowrie-env/bin/cowrie exists
+if [ ! -x /opt/cowrie/cowrie-env/bin/cowrie ]; then
+    sudo -u cowrie python3 -m venv /opt/cowrie/cowrie-env
+    sudo -u cowrie /opt/cowrie/cowrie-env/bin/pip install --quiet --upgrade pip
+    sudo -u cowrie /opt/cowrie/cowrie-env/bin/pip install --quiet -e /opt/cowrie
+fi
 REMOTE
 
 info "phase2a: cowrie config → /opt/cowrie/..."
@@ -136,6 +156,17 @@ chmod +x \
     /opt/hive/scripts/on-rotate.sh \
     /opt/hive/scripts/setup-wg-vps.sh 2>/dev/null || true
 chmod 600 /opt/cowrie/etc/cowrie.cfg /opt/cowrie/etc/userdb.txt 2>/dev/null || true
+
+# Open honeypot ports + WireGuard if ufw is active. Cowrie SSH lure on :22
+# is intentionally not added here — real sshd holds that port and moving it
+# is an operator decision, not something this script should do silently.
+if command -v ufw >/dev/null 2>&1 && ufw status | grep -q "^Status: active"; then
+    ufw allow 23/tcp    >/dev/null
+    ufw allow 80/tcp    >/dev/null
+    ufw allow 443/tcp   >/dev/null
+    ufw allow 51820/udp >/dev/null
+fi
+
 systemctl daemon-reload
 REMOTE
 
@@ -144,16 +175,13 @@ green "  Deploy complete."
 echo ""
 echo "  Next steps on the VPS (ssh $VPS):"
 echo ""
-echo "  1. Install cowrie (first time only):"
-echo "       cd /opt/cowrie && pip install -e . --quiet"
-echo ""
-echo "  2. Run hive-web setup (first time only):"
+echo "  1. Run hive-web setup (first time only):"
 echo "       bash /opt/hive/hive-web/setup.sh"
 echo ""
-echo "  3. Set up WireGuard tunnel:"
+echo "  2. Set up WireGuard tunnel:"
 echo "       bash /opt/hive/scripts/setup-wg-vps.sh"
 echo "     Then follow the printed instructions."
 echo ""
-echo "  4. Start services:"
+echo "  3. Start services:"
 echo "       systemctl enable --now hive-web cowrie pcap-capture"
 echo ""

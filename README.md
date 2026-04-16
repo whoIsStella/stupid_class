@@ -75,9 +75,9 @@ sudo bash /opt/hive/scripts/setup-wg-vps.sh --peer <ANALYSIS_PUBKEY>
 Verify the tunnel:
 
 ```bash
-ping 10.0.0.1   # from the local machine
+ping 10.77.0.1   # from the local machine
 # and from the VPS:
-ping 10.0.0.2
+ping 10.77.0.2
 ```
 
 ### 2. Install local secrets used by dashboards and enrichment
@@ -148,7 +148,7 @@ sudo systemctl status logstash
 
 What it does:
 
-- Listens for Beats on `10.0.0.2:5044`
+- Listens for Beats on `10.77.0.2:5044`
 - Routes web, Cowrie, and Suricata events into the right indices
 - Writes to local Elasticsearch at `localhost:9200`
 
@@ -169,7 +169,7 @@ host => "0.0.0.0"
 to:
 
 ```text
-host => "10.0.0.2"
+host => "10.77.0.2"
 ```
 
 Then restart Logstash:
@@ -291,7 +291,7 @@ On the VPS, the log sources that feed the analysis machine are:
 | 2222 | TCP | Cowrie SSH listener | Inside phase 2a VM |
 | 2323 | TCP | Cowrie Telnet listener | Inside phase 2a VM |
 | 5000 | TCP | Flask local dev port | Analysis/local dev only |
-| 5044 | TCP | Logstash Beats input | Analysis machine (`wg0` / `10.0.0.2`) |
+| 5044 | TCP | Logstash Beats input | Analysis machine (`wg0` / `10.77.0.2`) |
 | 9200 | TCP | Elasticsearch | Analysis machine (`localhost`) |
 | 3000 | TCP | Grafana | Analysis machine |
 | 51820 | UDP | WireGuard | VPS + analysis machine |

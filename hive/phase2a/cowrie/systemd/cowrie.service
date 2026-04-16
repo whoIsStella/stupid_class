@@ -6,12 +6,16 @@ After=network.target
 Type=simple
 User=cowrie
 WorkingDirectory=/opt/cowrie
-ExecStart=/opt/cowrie/cowrie-env/bin/python bin/cowrie start -n
+Environment=COWRIE_STDOUT=yes
+Environment=PATH=/opt/cowrie/cowrie-env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/opt/cowrie/cowrie-env/bin/cowrie start
 Restart=always
 RestartSec=5
-# Prevent filling disk with downloaded malware samples
-# Clean dl/ files older than 7 days on each start
-ExecStartPre=/bin/find /var/log/hive/dl -mtime +7 -delete
+# Prevent filling disk with downloaded malware samples.
+# Clean dl/ files older than 7 days on each start. -mindepth 1 keeps
+# find from trying to delete the directory itself when dl/ is older
+# than the cutoff (it's the parent, not a match target).
+ExecStartPre=/bin/find /var/log/hive/dl/ -mindepth 1 -mtime +7 -delete
 
 [Install]
 WantedBy=multi-user.target

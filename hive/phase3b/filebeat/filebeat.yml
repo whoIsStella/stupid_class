@@ -1,10 +1,10 @@
 # filebeat.yml — Hive log shipper config
 #
-# Runs on the VPS (10.0.0.1). Ships logs to Logstash on the analysis
-# machine (10.0.0.2:5044) over the WireGuard tunnel.
+# Runs on the VPS (10.77.0.1). Ships logs to Logstash on the analysis
+# machine (10.77.0.2:5044) over the WireGuard tunnel.
 #
 # Deploy: /etc/filebeat/filebeat.yml
-# Requires: WireGuard tunnel up (wg0, 10.0.0.1/10.0.0.2)
+# Requires: WireGuard tunnel up (wg0, 10.77.0.1/10.77.0.2)
 
 filebeat.inputs:
 
@@ -39,7 +39,7 @@ filebeat.inputs:
     fields_under_root: true
 
 output.logstash:
-  hosts: ["10.0.0.2:5044"]
+  hosts: ["10.77.0.2:5044"]
 
 filebeat.registry.path: /var/lib/filebeat/registry
 

@@ -24,7 +24,7 @@ services:
       - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
     network_mode: host                    # exposes :5044 on host — Filebeat can reach it
-                                          # over WireGuard at 10.0.0.2:5044
+                                          # over WireGuard at 10.77.0.2:5044
     depends_on:
       elasticsearch:
         condition: service_healthy

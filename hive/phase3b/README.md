@@ -12,5 +12,5 @@ Phase 3b provides the transport layer from the VPS to the local machine. It uses
 ## Notes
 
 - `hive/scripts/deploy-to-vps.sh` syncs this phase into `/opt/hive/phase3b/` on the VPS.
-- The default transport path is WireGuard `10.0.0.1 -> 10.0.0.2`, with Logstash listening on port `5044` on the tunnel address.
+- The default transport path is WireGuard `10.77.0.1 -> 10.77.0.2`, with Logstash listening on port `5044` on the tunnel address.
 - In this repo snapshot, phase 3b contains the JSON log shipping pieces: Filebeat config, one Logstash pipeline, and a Filebeat startup override.
