@@ -6,11 +6,10 @@
 # Usage:
 #   sudo bash hive/phase1/wireguard/setup-wg-analysis.sh --peer <VPS_PUBKEY>
 #
-# WireGuard addresses:
-#   Analysis machine (this): 10.77.0.2/24
-#   VPS (peer):              10.77.0.1/32  endpoint 70.34.215.229:51820
-
 set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../../scripts/hive.conf"
 
 WG_IF="wg0"
 WG_DIR="/etc/wireguard"
@@ -19,7 +18,7 @@ PUBKEY_FILE="$WG_DIR/analysis.pub"
 CONF="$WG_DIR/$WG_IF.conf"
 
 WG_ANALYSIS_ADDR="10.77.0.2/24"
-VPS_PUBLIC_IP="70.34.215.229"
+VPS_PUBLIC_IP="$VPS_IP"
 VPS_LISTEN_PORT="51820"
 WG_VPS_ALLOWED="10.77.0.1/32"
 

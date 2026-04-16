@@ -8,18 +8,15 @@
 #   - SSH key auth to VPS (root or sudo user with NOPASSWD)
 #   - rsync installed locally
 #
-# Environment overrides:
-#   VPS_USER  (default: root)
-#   VPS_IP    (default: 70.34.215.229)
-#   SSH_KEY   (default: ~/.ssh/id_ed25519)
-
 set -euo pipefail
 
-VPS_USER="${VPS_USER:-root}"
-VPS_IP="${VPS_IP:-70.34.215.229}"
-VPS_SSH_PORT="${VPS_SSH_PORT:-2200}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HIVE="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# shellcheck source=hive/scripts/hive.conf
+source "$SCRIPT_DIR/hive.conf"
+
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
-HIVE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"   # .../hive/
 
 DRY_RUN=0
 if [ "${1:-}" = "--dry-run" ]; then DRY_RUN=1; fi
