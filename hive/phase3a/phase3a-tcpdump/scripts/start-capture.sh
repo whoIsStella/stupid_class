@@ -5,8 +5,6 @@
 # Rotates every ROTATE_MINUTES minutes, keeping MAX_FILES files.
 # Writes to /var/log/hive/pcap/ — directory must exist (service prereq).
 #
-# Interface: autodetected from the default route; override with HIVE_IFACE env var.
-
 set -euo pipefail
 
 IFACE="${HIVE_IFACE:-$(ip -o route show default | awk '{print $5; exit}')}"

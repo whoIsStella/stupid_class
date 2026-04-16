@@ -65,13 +65,11 @@ mkdir -p \
     /etc/suricata/rules \
     /etc/systemd/system
 
-# cowrie runs as its own unprivileged user
 if ! id cowrie >/dev/null 2>&1; then
     useradd --system --home-dir /opt/cowrie --shell /usr/sbin/nologin cowrie
 fi
 
-# cowrie needs its upstream source tree on the VPS; we only ship config files
-# below, so clone it here on first deploy.
+# Only config files are shipped below; the upstream source tree has to be cloned.
 if [ ! -d /opt/cowrie/.git ]; then
     apt-get update -qq
     apt-get install -y -qq git python3-venv python3-dev build-essential libssl-dev libffi-dev
@@ -79,7 +77,6 @@ if [ ! -d /opt/cowrie/.git ]; then
 fi
 chown -R cowrie:cowrie /opt/cowrie /var/log/hive/dl /var/log/hive/tty
 
-# Build the cowrie venv if missing so /opt/cowrie/cowrie-env/bin/cowrie exists
 if [ ! -x /opt/cowrie/cowrie-env/bin/cowrie ]; then
     sudo -u cowrie python3 -m venv /opt/cowrie/cowrie-env
     sudo -u cowrie /opt/cowrie/cowrie-env/bin/pip install --quiet --upgrade pip
@@ -157,9 +154,7 @@ chmod +x \
     /opt/hive/scripts/setup-wg-vps.sh 2>/dev/null || true
 chmod 600 /opt/cowrie/etc/cowrie.cfg /opt/cowrie/etc/userdb.txt 2>/dev/null || true
 
-# Open honeypot ports + WireGuard if ufw is active. Cowrie SSH lure on :22
-# is intentionally not added here — real sshd holds that port and moving it
-# is an operator decision, not something this script should do silently.
+# 22/tcp deliberately omitted: real sshd holds it; moving it is an operator call.
 if command -v ufw >/dev/null 2>&1 && ufw status | grep -q "^Status: active"; then
     ufw allow 23/tcp    >/dev/null
     ufw allow 80/tcp    >/dev/null
