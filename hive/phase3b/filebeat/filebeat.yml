@@ -22,6 +22,7 @@ filebeat.inputs:
     enabled: true
     paths:
       - /var/log/hive/cowrie.json
+    symlinks: true
     json.keys_under_root: true
     json.add_error_key: true
     fields:

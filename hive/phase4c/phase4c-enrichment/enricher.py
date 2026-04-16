@@ -72,6 +72,9 @@ def collect_unique_ips(es: Elasticsearch) -> dict[str, dict]:
             ignore_unavailable=True,
         )
 
+        if "aggregations" not in resp:
+            log.info("  no data in %s, skipping", index_pattern)
+            continue
         buckets = resp["aggregations"]["unique_ips"]["buckets"]
         log.info("  found %d unique IPs in %s", len(buckets), index_pattern)
 
@@ -102,6 +105,8 @@ def already_enriched_ips(es: Elasticsearch) -> set[str]:
             body={"size": 0, "aggs": {"ips": {"terms": {"field": "ip", "size": 100000}}}},
             ignore_unavailable=True,
         )
+        if "aggregations" not in resp:
+            return set()
         return {b["key"] for b in resp["aggregations"]["ips"]["buckets"]}
     except es_exceptions.NotFoundError:
         return set()

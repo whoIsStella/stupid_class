@@ -2,7 +2,7 @@
 ---
 # suricata.yaml — Hive IDS config
 # Runs on the VPS host directly (not in a microVM).
-# AF_PACKET mode on eth0 — passive IDS only, never drops packets.
+# AF_PACKET mode on enp1s0 — passive IDS only, never drops packets.
 #
 # BEFORE DEPLOYING: replace YOUR_VPS_PUBLIC_IP with the actual VPS public IP.
 #   sed -i 's/YOUR_VPS_PUBLIC_IP/1.2.3.4/' /etc/suricata/suricata.yaml
@@ -45,10 +45,10 @@ vars:
     VXLAN_PORTS: 4789
     TEREDO_PORTS: 3544
 
-# Packet capture — AF_PACKET on eth0
+# Packet capture — AF_PACKET on enp1s0
 
 af-packet:
-  - interface: eth0
+  - interface: enp1s0
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes
@@ -93,10 +93,6 @@ outputs:
         - flow:
             all: yes
         - netflow
-        - stats:
-            totals: yes
-            threads: no
-            deltas: no
 
   # All other outputs disabled
   - fast:

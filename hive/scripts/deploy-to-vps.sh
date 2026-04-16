@@ -17,6 +17,7 @@ set -euo pipefail
 
 VPS_USER="${VPS_USER:-root}"
 VPS_IP="${VPS_IP:-70.34.215.229}"
+VPS_SSH_PORT="${VPS_SSH_PORT:-2200}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
 HIVE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"   # .../hive/
 
@@ -24,7 +25,7 @@ DRY_RUN=0
 if [ "${1:-}" = "--dry-run" ]; then DRY_RUN=1; fi
 
 VPS="$VPS_USER@$VPS_IP"
-SSH_OPTS=(-i "$SSH_KEY" -o StrictHostKeyChecking=accept-new -o BatchMode=yes)
+SSH_OPTS=(-i "$SSH_KEY" -p "$VPS_SSH_PORT" -o StrictHostKeyChecking=accept-new -o BatchMode=yes)
 RSYNC_OPTS=(-az --delete --exclude='__pycache__' --exclude='*.pyc'
             --exclude='.gitignore' --exclude='.venv' --exclude='logs'
             -e "ssh ${SSH_OPTS[*]}")

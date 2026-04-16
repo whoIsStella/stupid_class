@@ -1,7 +1,3 @@
 # Never commit filled-in secrets
 secrets.env
 *.env.local
-
-TODO.md
-
-
