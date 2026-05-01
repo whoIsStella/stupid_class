@@ -4,8 +4,8 @@ node.name: hive-node-1
 # Single-node — no cluster formation needed
 discovery.type: single-node
 
-# Bind to localhost only
-network.host: 127.0.0.1
+# Bind inside the container; host exposure is restricted by docker-compose.yml
+network.host: 0.0.0.0
 
 # Data and log paths (inside container — mapped to Docker volume)
 path.data: /usr/share/elasticsearch/data

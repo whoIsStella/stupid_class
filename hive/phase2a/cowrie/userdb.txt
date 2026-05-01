@@ -1,8 +1,8 @@
-# userdb.txt — credentials that grant access to the fake shell
+# userdb.txt - credentials that grant access to the fake shell
 # Format: username:x:password
 # Everything not listed here fails with "Access denied".
 #
-# Bank persona — plausible sysadmin and app accounts for cascadecommbank.com
+# Bank persona - plausible sysadmin and app accounts for cascadecommbank.com
 
 # Generic targets
 root:x:root

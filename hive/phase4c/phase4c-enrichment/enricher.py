@@ -18,7 +18,7 @@ Environment:
 import sys
 import time
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from elasticsearch import Elasticsearch, exceptions as es_exceptions
 
@@ -97,12 +97,17 @@ def collect_unique_ips(es: Elasticsearch) -> dict[str, dict]:
     return ip_data
 
 
-def already_enriched_ips(es: Elasticsearch) -> set[str]:
-    """Return the set of IPs that already have a record in hive-enriched-*."""
+def recently_enriched_ips(es: Elasticsearch) -> set[str]:
+    """Return IPs with an enrichment record newer than the configured refresh window."""
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=config.ENRICHMENT_REFRESH_HOURS)
     try:
         resp = es.search(
             index="hive-enriched-*",
-            body={"size": 0, "aggs": {"ips": {"terms": {"field": "ip", "size": 100000}}}},
+            body={
+                "size": 0,
+                "query": {"range": {"@timestamp": {"gte": cutoff.isoformat()}}},
+                "aggs": {"ips": {"terms": {"field": "ip", "size": 100000}}},
+            },
             ignore_unavailable=True,
         )
         if "aggregations" not in resp:
@@ -188,12 +193,12 @@ def main() -> None:
         sys.exit(1)
 
     all_ips     = collect_unique_ips(es)
-    enriched    = already_enriched_ips(es)
-    new_ips     = {ip: data for ip, data in all_ips.items() if ip not in enriched}
+    recent_ips  = recently_enriched_ips(es)
+    new_ips     = {ip: data for ip, data in all_ips.items() if ip not in recent_ips}
 
     log.info(
-        "Total unique IPs: %d  |  Already enriched: %d  |  To process: %d",
-        len(all_ips), len(enriched), len(new_ips),
+        "Total unique IPs: %d  |  Recently enriched: %d  |  To process: %d  |  Refresh window: %dh",
+        len(all_ips), len(recent_ips), len(new_ips), config.ENRICHMENT_REFRESH_HOURS,
     )
 
     if not new_ips:

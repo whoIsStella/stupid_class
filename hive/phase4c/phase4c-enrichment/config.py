@@ -21,7 +21,11 @@ ENRICHED_INDEX = "hive-enriched"
 
 # SQLite cache
 CACHE_DB_PATH   = os.environ.get("HIVE_CACHE_DB", "/var/lib/hive/enrichment_cache.db")
-CACHE_TTL_HOURS = 24
+CACHE_TTL_HOURS = int(os.environ.get("HIVE_CACHE_TTL_HOURS", 24))
+
+# Elasticsearch enrichment refresh window. IPs with an enrichment document newer
+# than this are skipped; older records are refreshed on a later run.
+ENRICHMENT_REFRESH_HOURS = int(os.environ.get("HIVE_ENRICHMENT_REFRESH_HOURS", CACHE_TTL_HOURS))
 
 # Rate limiting (seconds between requests per API)
 ABUSEIPDB_SLEEP = 0.1

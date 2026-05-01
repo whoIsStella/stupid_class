@@ -4,7 +4,7 @@ datasources:
   - name: Elasticsearch-All
     uid: elasticsearch-all
     type: elasticsearch
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     database: "hive-*"
     isDefault: true
     jsonData:
@@ -17,7 +17,7 @@ datasources:
   - name: Elasticsearch-Web
     uid: elasticsearch-web
     type: elasticsearch
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     database: "hive-web-*"
     isDefault: false
     jsonData:
@@ -29,7 +29,7 @@ datasources:
   - name: Elasticsearch-Cowrie
     uid: elasticsearch-cowrie
     type: elasticsearch
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     database: "hive-cowrie-*"
     isDefault: false
     jsonData:
@@ -39,7 +39,7 @@ datasources:
   - name: Elasticsearch-Suricata
     uid: elasticsearch-suricata
     type: elasticsearch
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     database: "hive-suricata-*"
     isDefault: false
     jsonData:
@@ -49,7 +49,7 @@ datasources:
   - name: Elasticsearch-Enriched
     uid: elasticsearch-enriched
     type: elasticsearch
-    url: http://localhost:9200
+    url: http://elasticsearch:9200
     database: "hive-enriched-*"
     isDefault: false
     jsonData:

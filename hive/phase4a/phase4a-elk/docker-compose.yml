@@ -1,17 +1,15 @@
-version: '3.8'
-
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false      # disable auth for local dev
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g       # cap RAM — tune to your machine
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - esdata:/usr/share/elasticsearch/data
-    network_mode: host                    # rootless Podman: host networking required for
-                                          # port binding to be reachable from the host
+    ports:
+      - "127.0.0.1:9200:9200"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 10s
@@ -23,8 +21,11 @@ services:
     volumes:
       - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
-    network_mode: host                    # exposes :5044 on host — Filebeat can reach it
-                                          # over WireGuard at 10.77.0.2:5044
+    ports:
+      - "${HIVE_LOGSTASH_BIND:-127.0.0.1}:5044:5044"
+      - "127.0.0.1:9600:9600"
+    environment:
+      - ES_HOST=elasticsearch
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -33,7 +34,8 @@ services:
     image: docker.elastic.co/kibana/kibana:8.13.0
     volumes:
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-    network_mode: host                    # exposes :5601 on host
+    ports:
+      - "127.0.0.1:5601:5601"
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -43,9 +45,10 @@ services:
     volumes:
       - ../../phase4b/phase4b-grafana/provisioning:/etc/grafana/provisioning
       - grafanadb:/var/lib/grafana
-    network_mode: host                    # exposes :3000 on host
+    ports:
+      - "127.0.0.1:3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-honeypot2025}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in environment or /etc/hive/secrets.env}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_AUTH_ANONYMOUS_ENABLED=false
       - GF_ANALYTICS_REPORTING_ENABLED=false
