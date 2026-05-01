@@ -2,3 +2,7 @@
 secrets.env
 *.env.local
 
+ignored_things.md
+README.md
+hive/phase2b/README.md
+hive/phase4a/README.md
